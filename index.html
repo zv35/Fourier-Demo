@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<script>
+/*
+@
+MIT License
+@licstart
+Copyright (c) 2021 zv35
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+@licend
+*/
+		</script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<!--- <script> /*
-		License Goes Here
-		*/ </script> --->
 		<link rel="stylesheet" href="style.css">
-		<!--- <script src="script.js"></script> --->
+
+		<meta name="description" content="A free and simple Fourier circles demo">
+		<meta name="keywords" content="free, fourier, circles, demo">
+		<meta name="author" content="Zak Vladich">
 	</head>
 	<body>
 	
 	<h1 style="text-align: center;">Fourier Circles</h1>
 	<hr>
 	<canvas id="canvas" height="500"></canvas>
-	<!--- <a href="javascript.html" rel="jslicense">JavaScript license information</a> --->
 	<hr>
 	<h2 style="text-align: center;">Modify Circles</h2>
 	<table style="width: 60%;">
@@ -44,11 +69,11 @@
 			<td>Phase:</td>
 			<td><input oninput="updateCircle()" class="slider" type="range" min="1" max="100" value="0" id="phase"></td>
 		</tr><tr>
-			<td>Scale:</td>
+			<td>Graph Scale:</td>
 			<td></td>
 			<td><input oninput="updateView()" class="slider" type="range" min="10" max="1000" value="200" id="scale"></td>
 		</tr><tr>
-			<td>Speed:</td>
+			<td>Graph Speed:</td>
 			<td></td>
 			<td><input oninput="updateView()" class="slider" type="range" min="2" max="7200" value="3600" id="speed"></td>
 		</tr><tr>
@@ -66,7 +91,10 @@
 			</td>
 		</tr>
 	</table>
-	
 	<script src="fourier.js"></script>
 	</body>
+
+	<footer>
+		<a href="javascript.html" rel="jslicense">About</a>
+	</footer>
 </html>
