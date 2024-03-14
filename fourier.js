@@ -1,40 +1,82 @@
+/* Setting up canvas */
 var canvas = document.getElementById("canvas");
+canvas.width = window.innerWidth;
 var ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth - 10; // Gap to remove side scroll bar
 
-// Settings
+
+/* Settings */
 var fps = 24;
-var speed = 3600;
+var speed = 3600; // 12 Hz
 var graphSpacing = 2;
-var linePoints   = 400;
-ctx.lineWidth = 1.5;
-
-
-var line    = [0];
+var margin = 0;
+var linePoints;
+ctx.lineWidth = 1;
+/* Arrays containing line buffer and list of circles */
+var buffer  = [];
 var circles = [];
 
 
+function resizeWindow(){
+    if (canvas.width < canvas.height){margin = 250;} // Narrow mode
+    canvas.width = window.innerWidth;
+    // Set the buffer size to line up with the size of the circle
+    linePoints = (window.innerWidth + margin - 375) / graphSpacing;
+}
+addEventListener("resize", (event) => {resizeWindow();});
+resizeWindow();
 
 function updateView(){
 	var scale = document.getElementById("scale").value / 100;
 	graphSpacing = scale;
-	linePoints = 800/scale;
-	while (line.length > linePoints){line.shift()}
-	
+	while (buffer.length > linePoints){buffer.shift()}
+
 	speed = document.getElementById("speed").value;
+	resizeWindow();
 }
-function updateSliders(){
-	circleSelect = circles[document.getElementById("circleSelect").selectedIndex]
-	document.getElementById("frequency").value = circleSelect.frequency;
-	document.getElementById("amplitude").value = circleSelect.amplitude;
-	document.getElementById("phase").value = circleSelect.phase;
+
+function updateCircle(){
+	circles[document.getElementById("circleSelect").selectedIndex]  = {
+		frequency: document.getElementById("frequency").value,
+		amplitude: document.getElementById("amplitude").value,
+		phase: document.getElementById("phase").value / 100 * Math.PI,
+		center: circles[document.getElementById("circleSelect").selectedIndex].center
+	}
 }
+
+function removeCircle(){
+	if(circles.length > 1){
+		circles.pop();
+		let circleSelect = document.getElementById("circleSelect");
+		circleSelect.remove(circleSelect.length - 1);
+	}
+	updateSliders();
+}
+
+function addCircle(){
+	circles.push({
+		amplitude:75,
+		frequency:50,
+		phase:0
+	});
+
+	var option = document.createElement('option');
+    option.text = option.value = circles.length;
+
+    var circleSelect = document.getElementById("circleSelect");
+	circleSelect.add(option, circleSelect.options.length);
+}; addCircle();
+
 function loadPreset(){
-	var custom = document.querySelector(".custom");
-	custom.style.visibility = "hidden";
+	var custom = document.getElementById("circleSelect");
+	custom.disabled = true;
+	for (let i = 0; i < circles.length; i++){
+	    removeCircle();
+	}
+	custom.selectedIndex = "0";
+	addCircle();
 	switch(document.getElementById("presetSelect").value){
 		case "Custom":
-			custom.style.visibility = "";
+			custom.disabled = false;
 			circles = [{amplitude: 100, frequency: 30, phase: 0, center: {x: canvas.height/2, y: canvas.height/2}}];
 			break;
 		case "Descending":
@@ -63,49 +105,32 @@ function loadPreset(){
 			break;
 	}
 }
-function updateCircle(){
-	circles[document.getElementById("circleSelect").selectedIndex]  = {
-		frequency: document.getElementById("frequency").value,
-		amplitude: document.getElementById("amplitude").value,
-		phase: document.getElementById("phase").value / 100 * Math.PI,
-		center: circles[document.getElementById("circleSelect").selectedIndex].center
-	}
+
+function updateSliders(){
+	let circleSelect = circles[document.getElementById("circleSelect").selectedIndex]
+	if (circleSelect !== undefined){
+	    document.getElementById("frequency").value = circleSelect.frequency;
+	    document.getElementById("amplitude").value = circleSelect.amplitude;
+	    document.getElementById("phase").value = circleSelect.phase;
+    }
 }
-function removeCircle(){
-	if(circles.length > 1){
-		circles.pop();
-		let circleSelect = document.getElementById("circleSelect");
-		circleSelect.remove(circleSelect.length - 1);
-	}
-	updateSliders();
-}
-function addCircle(){
-	circles.push({
-		amplitude:75,
-		frequency:50,
-		phase:0
-	});
-	
-	var option = document.createElement('option');
-    option.text = option.value = circles.length;
-    
-    var circleSelect = document.getElementById("circleSelect");
-	circleSelect.add(option, circleSelect.options.length);
-}; addCircle();
 circles[0] = {amplitude: 100, frequency: 30, phase: 0, center: {x: canvas.height/2, y: canvas.height/2}};
 updateSliders();
 
 
 var counter = 0;
 setInterval(function(){
+    // Clear the existing canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Set color to black
 	ctx.strokeStyle = "#000"
+	// Draw each circle
 	for (let i=0; i < circles.length; i++){
 
 		// Drawing circle
 		ctx.beginPath();
-		ctx.arc(circles[i].center.x, circles[i].center.y, circles[i].amplitude, 0, 2 * Math.PI);
+		ctx.arc(circles[i].center.x - margin, circles[i].center.y, circles[i].amplitude, 0, 2 * Math.PI);
 		ctx.stroke()
 
 
@@ -115,37 +140,39 @@ setInterval(function(){
 			y: circles[i].center.y + circles[i].amplitude * Math.sin(counter * circles[i].frequency + circles[i].phase)
 		}
 
-	
-		
+
+
 		ctx.beginPath();
 		if (i == circles.length - 1){
-			line.push(outerPoint);
+			buffer.push(outerPoint);
 			ctx.fillStyle = "#0F0";
-			ctx.arc(outerPoint.x, outerPoint.y, 3, 0, 2 * Math.PI);
+			ctx.arc(outerPoint.x - margin, outerPoint.y, 3, 0, 2 * Math.PI);
 			ctx.fill();
 		} else {
 			circles[i+1].center = outerPoint;
 		}
-		// Crawing center point
+		// Drawing center point
 		ctx.fillStyle = "#F00";
 		ctx.beginPath();
-		ctx.arc(circles[i].center.x, circles[i].center.y, 3, 0, 2 * Math.PI);
+		ctx.arc(circles[i].center.x - margin, circles[i].center.y, 3, 0, 2 * Math.PI);
 		ctx.fill();
-		
-	}
-	
 
-	if (line.length >= linePoints){line.shift();}
-	
+	}
+
+    // Delete any extra line length
+	while (buffer.length >= linePoints){buffer.shift();}
+
+	// Drawing the line
 	ctx.strokeStyle = "#0AF"
 	ctx.beginPath();
-	ctx.moveTo(line[line.length - 1].x, line[line.length - 1].y)
-	//ctx.moveTo(canvas.height/2 + circles[0].amplitude + 6, canvas.height/2);
-	for (let i=line.length-1; i > 0; i--){
-		ctx.lineTo(canvas.width - i * graphSpacing, line[i].y)
+	ctx.moveTo(buffer[buffer.length - 1].x - margin, buffer[buffer.length - 1].y)
+	for (let i=buffer.length-1; i > 0; i--){
+	    let graphStartX = canvas.width - (i * graphSpacing);
+		ctx.lineTo(graphStartX, buffer[i].y);
 	}
 
 	ctx.stroke();
-	
+
 	counter += Math.PI / speed;
 }, 1/fps*1000);
+

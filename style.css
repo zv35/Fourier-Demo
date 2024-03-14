@@ -1,5 +1,13 @@
+:root {
+    font-family: monospace;
+    max-width: 100%;
+    overflow-x: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
 footer {
-	position: absolute;
+	position: relative;
 	width: 20%;
 	bottom: 2%;
 	left: 40%;
@@ -7,18 +15,21 @@ footer {
 	border-top: 1px solid black;
 	text-align: center;
 	padding-top: 10px;
+	margin-top: 10px;
 }
 
-body {
-	font-family: monospace;
-}
 table {
 	padding: 8px;
 	margin: auto;
 	border: 1px solid black;
 }
+
 td {
 	padding-bottom: 10px;
+}
+
+button {
+	width: 50px;
 }
 
 .slider {
@@ -27,6 +38,8 @@ td {
 	height: 25px;
 	background: #AAAAAA;
 }
-button {
-	width: 50px;
+
+#scale {
+    direction: rtl
 }
+

@@ -6,7 +6,7 @@
 @
 MIT License
 @licstart
-Copyright (c) 2021 zv35
+Copyright (c) 2021 Zak Vladich
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,8 @@ SOFTWARE.
 		<meta name="description" content="A free and simple Fourier circles demo">
 		<meta name="keywords" content="free, fourier, circles, demo">
 		<meta name="author" content="Zak Vladich">
+		<link rel="icon" type="image/png" href="favicon.png"/>
+	    <script src="fourier.js" defer></script>
 	</head>
 	<body>
 	
@@ -60,23 +62,23 @@ SOFTWARE.
 		</tr><tr>
 			<td></td>
 			<td>Frequency:</td>
-			<td><input oninput="updateCircle()" class="slider" type="range" min="1" max="1000" value="50" id="frequency"></td>
+			<td><input oninput="updateCircle()" autocomplete="off" class="slider" type="range" min="1" max="1000" value="50" id="frequency"></td>
 		</tr><tr>
 			<td></td>
 			<td>Amplitude:</td>
-			<td><input oninput="updateCircle()" class="slider" type="range" min="1" max="200" value="100" id="amplitude"></td>
+			<td><input oninput="updateCircle()" autocomplete="off" class="slider" type="range" min="1" max="200" value="100" id="amplitude"></td>
 		</tr><tr>
 			<td></td>
 			<td>Phase:</td>
-			<td><input oninput="updateCircle()" class="slider" type="range" min="1" max="100" value="0" id="phase"></td>
+			<td><input oninput="updateCircle()" autocomplete="off" class="slider" type="range" min="1" max="100" value="0" id="phase"></td>
 		</tr><tr>
-			<td>Graph Scale:</td>
+			<td>Resolution:</td>
 			<td></td>
-			<td><input oninput="updateView()" class="slider" type="range" min="10" max="1000" value="200" id="scale"></td>
+			<td><input oninput="updateView()" autocomplete="off" class="slider" type="range" min="10" max="2000" value="200" id="scale"></td>
 		</tr><tr>
-			<td>Graph Speed:</td>
+			<td>Speed (all circles):</td>
 			<td></td>
-			<td><input oninput="updateView()" class="slider" type="range" min="2" max="7200" value="3600" id="speed"></td>
+			<td><input oninput="updateView()" autocomplete="off" class="slider" type="range" min="36" max="7200" value="3600" id="speed"></td>
 		</tr><tr>
 			<td><label for="presetSelect">Preset:</label></td>
 			<td></td>
@@ -92,7 +94,6 @@ SOFTWARE.
 			</td>
 		</tr>
 	</table>
-	<script src="fourier.js"></script>
 	</body>
 
 	<footer>
